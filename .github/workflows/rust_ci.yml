@@ -1,0 +1,36 @@
+name: Rust CI
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'examples/*'
+      - 'src/*'
+      - 'Cargo.toml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'examples/*'
+      - 'src/*'
+      - 'Cargo.toml'
+
+env:
+  RUSTFLAGS: "-Dwarnings"
+
+jobs:
+  code_check:
+    name: Check Code Quality
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cargo check
+        run: cargo check --all
+
+      - name: cargo format check
+        run: cargo fmt --all --check
+
+      - name: cargo test
+        run: cargo test --all
+
+      - name: cargo clippy check
+        run: cargo clippy --all

@@ -1,0 +1,13 @@
+[package]
+name = "macos_timestamp_ns"
+version = "0.1.0"
+edition = "2024"
+authors = ["Wenqing Zong"]
+description = "Provide nano second timestamps for MacOS platform"
+
+[dependencies]
+libc = "0.2.178"
+
+[[example]]
+name = "example"
+path = "examples/example.rs"
