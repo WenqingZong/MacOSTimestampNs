@@ -76,13 +76,35 @@ impl HighResClock {
 
 static HIGH_RES_CLOCK: OnceLock<HighResClock> = OnceLock::new();
 
-/// Get the current nanosecond timestamp as an u128.
+/// Get the current nanosecond timestamp as an [`u128`].
+/// # Example
+/// ```rust
+/// use macos_timestamp_ns::get_timestamp_ns;
+///
+/// # fn main() {
+/// let ts = get_timestamp_ns();
+/// assert_eq!(ts.to_string().len(), 19);
+/// # }
+/// ```
 pub fn get_timestamp_ns() -> u128 {
     let clock = HIGH_RES_CLOCK.get_or_init(HighResClock::new);
     clock.now_nanos()
 }
 
-/// Get the current nanosecond timestamp as DateTime<Utc>.
+/// Get the current nanosecond timestamp as [`DateTime<Utc>`].
+/// # Example
+/// ```rust
+/// #[cfg(feature = "chrono")]
+/// use macos_timestamp_ns::get_timestamp_ns_datetime;
+///
+/// # fn main() {
+/// #[cfg(feature = "chrono")]
+/// {
+///     let ts = get_timestamp_ns_datetime();
+///     assert_eq!(ts.timestamp_nanos_opt().unwrap().to_string().len(), 19);
+/// }
+/// # }
+/// ```
 #[cfg(feature = "chrono")]
 pub fn get_timestamp_ns_datetime() -> DateTime<Utc> {
     let ts_ns = get_timestamp_ns();
