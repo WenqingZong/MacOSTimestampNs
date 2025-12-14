@@ -1,6 +1,9 @@
 # MacOSTimestampNs
 Provide nano second timestamps for MacOS, as `SystemTime::now()` only has microsecond precision. 
 
+## Kind Reminder
+This library is only intended to be used in `MacOS`. It does nothing in other platforms. 
+
 ## Example
 ```rust
 use macos_timestamp_ns::get_timestamp_ns;
@@ -9,6 +12,7 @@ use macos_timestamp_ns::get_timestamp_ns_datetime;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+#[cfg(target_os = "macos")]
 fn main() {
     let mut timestamps_ns = vec![];
     for _ in 0..10 {

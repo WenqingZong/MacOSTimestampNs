@@ -4,6 +4,7 @@ use macos_timestamp_ns::get_timestamp_ns_datetime;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+#[cfg(target_os = "macos")]
 fn main() {
     let mut timestamps_ns = vec![];
     for _ in 0..10 {
@@ -34,4 +35,9 @@ fn main() {
             println!()
         }
     }
+}
+
+#[cfg(not(target_os = "macos"))]
+fn main() {
+    println!("This library only works on macos, it does nothing on other platforms");
 }

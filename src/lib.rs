@@ -14,6 +14,7 @@ struct TimeBase {
     denom: u32,
 }
 
+#[cfg(target_os = "macos")]
 unsafe extern "C" {
     /// https://developer.apple.com/documentation/driverkit/mach_timebase_info-c.func
     fn mach_timebase_info(info: *mut TimeBase) -> c_int;
@@ -24,6 +25,7 @@ unsafe extern "C" {
 
 static mut TIME_BASE: Option<TimeBase> = None;
 
+#[cfg(target_os = "macos")]
 fn get_timebase() -> TimeBase {
     unsafe {
         TIME_BASE.unwrap_or_else(|| {
@@ -35,6 +37,7 @@ fn get_timebase() -> TimeBase {
     }
 }
 
+#[cfg(target_os = "macos")]
 fn get_monotonic_nanos() -> u128 {
     let TimeBase { numer, denom } = get_timebase();
     let ticks = unsafe { mach_absolute_time() };
@@ -45,12 +48,14 @@ fn get_monotonic_nanos() -> u128 {
     (ticks as u128 * numer) / denom
 }
 
+#[cfg(target_os = "macos")]
 /// Get high resolution wall's nanosecond timestamp, based on system time and monotonic nanos.
 struct HighResClock {
     base_time_ns: u128,
     base_monotonic_ns: u128,
 }
 
+#[cfg(target_os = "macos")]
 impl HighResClock {
     fn new() -> Self {
         let base_time_ns = SystemTime::now()
@@ -74,6 +79,7 @@ impl HighResClock {
     }
 }
 
+#[cfg(target_os = "macos")]
 static HIGH_RES_CLOCK: OnceLock<HighResClock> = OnceLock::new();
 
 /// Get the current nanosecond timestamp as an [`u128`].
@@ -86,6 +92,7 @@ static HIGH_RES_CLOCK: OnceLock<HighResClock> = OnceLock::new();
 /// assert_eq!(ts.to_string().len(), 19);
 /// # }
 /// ```
+#[cfg(target_os = "macos")]
 pub fn get_timestamp_ns() -> u128 {
     let clock = HIGH_RES_CLOCK.get_or_init(HighResClock::new);
     clock.now_nanos()
@@ -106,6 +113,7 @@ pub fn get_timestamp_ns() -> u128 {
 /// # }
 /// ```
 #[cfg(feature = "chrono")]
+#[cfg(target_os = "macos")]
 pub fn get_timestamp_ns_datetime() -> DateTime<Utc> {
     let ts_ns = get_timestamp_ns();
     DateTime::from_timestamp_nanos(ts_ns as i64)

@@ -1,6 +1,6 @@
 [package]
 name = "macos_timestamp_ns"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 authors = ["Wenqing Zong"]
 documentation = "https://docs.rs/macos_timestamp_ns/latest/macos_timestamp_ns/"
