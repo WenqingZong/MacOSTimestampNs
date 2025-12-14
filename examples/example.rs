@@ -4,7 +4,7 @@ use macos_timestamp_ns::get_timestamp_ns_datetime;
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", docsrs))]
 fn main() {
     let mut timestamps_ns = vec![];
     for _ in 0..10 {
