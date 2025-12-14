@@ -1,3 +1,8 @@
+//! MacOS only provides timestamps in microsecond precision, which might not be precious enough in
+//! some situations. This crate provides the current time timestamp in nanosecond precision.
+
+#[cfg(feature = "chrono")]
+use chrono::{DateTime, Utc};
 use libc::c_int;
 use std::sync::OnceLock;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -71,7 +76,15 @@ impl HighResClock {
 
 static HIGH_RES_CLOCK: OnceLock<HighResClock> = OnceLock::new();
 
+/// Get the current nanosecond timestamp as an u128.
 pub fn get_timestamp_ns() -> u128 {
     let clock = HIGH_RES_CLOCK.get_or_init(HighResClock::new);
     clock.now_nanos()
+}
+
+/// Get the current nanosecond timestamp as DateTime<Utc>.
+#[cfg(feature = "chrono")]
+pub fn get_timestamp_ns_datetime() -> DateTime<Utc> {
+    let ts_ns = get_timestamp_ns();
+    DateTime::from_timestamp_nanos(ts_ns as i64)
 }
