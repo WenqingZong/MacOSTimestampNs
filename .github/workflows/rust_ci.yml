@@ -35,27 +35,48 @@ jobs:
       - name: cargo clippy check
         run: cargo clippy --all --all-features
 
-  publish_documentation:
-    name: Publish Documentation to Github IO
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    permissions:
-      pages: write
-      id-token: write
+  build_document:
+    name: Build
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Build Documentaiton
-        run: cargo doc --all --no-deps
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Make index.html a link to help.html
-        run: cd target/doc && ln -s help.html index.html
+      - name: Configure cache
+        uses: Swatinem/rust-cache@v2
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Setup pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Clean docs folder
+        run: cargo clean --doc
+
+      - name: Build docs
+        run: cargo doc --no-deps --all-features
+
+      - name: Add redirect
+        run: echo '<meta http-equiv="refresh" content="0;url=aoc/index.html">' > target/doc/index.html
+
+      - name: Remove lock file
+        run: rm target/doc/.lock
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: target/doc
 
-      - name: Deploy Pages artifact
+  deploy_document:
+    name: Deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: macos-latest
+    needs: build_document
+    steps:
+      - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
