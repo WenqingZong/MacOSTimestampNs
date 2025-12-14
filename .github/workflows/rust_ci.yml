@@ -2,18 +2,8 @@ name: Rust CI
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - '.github/*'
-      - 'examples/*'
-      - 'src/*'
-      - 'Cargo.toml'
   push:
     branches: [ main ]
-    paths:
-      - '.github/*'
-      - 'examples/*'
-      - 'src/*'
-      - 'Cargo.toml'
 
 env:
   RUSTFLAGS: "-Dwarnings"
