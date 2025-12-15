@@ -1,10 +1,15 @@
 [package]
 name = "macos_timestamp_ns"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 authors = ["Wenqing Zong"]
 documentation = "https://docs.rs/macos_timestamp_ns/latest/macos_timestamp_ns/"
 description = "Provide nano second timestamps for MacOS platform"
+exclude = [
+    "examples/",
+    ".github/",
+    ".gitignore"
+]
 keywords = ["MacOS", "timestamp", "nanosecond"]
 repository = "https://github.com/WenqingZong/MacOSTimestampNs"
 license = "GPL-3.0-only"
@@ -17,15 +22,13 @@ libc = "0.2.178"
 name = "example"
 path = "examples/example.rs"
 
-exclude = [
-    "examples/",
-    ".github/",
-    ".gitignore"
-]
+[features]
+docsrs = []
 
 [lib]
 crate-type = ["lib", "staticlib", "cdylib"]
 
 [package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "docsrs"]
 all-features = true
 

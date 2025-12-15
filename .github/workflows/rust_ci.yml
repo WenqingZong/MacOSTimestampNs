@@ -26,3 +26,15 @@ jobs:
 
       - name: cargo clippy check
         run: cargo clippy --all --all-features
+
+  doc:
+    name: Test Documentation Generation
+    runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: -Dwarnings
+    needs: ["code_check"]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: dtolnay/install@cargo-docs-rs
+      - run: cargo docs-rs

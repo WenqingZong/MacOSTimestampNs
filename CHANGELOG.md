@@ -1,3 +1,7 @@
+## 0.1.4 2025-Dec-15
+### Fixed
+- Doc compilation error in docs.rs.
+
 ## 0.1.3 2025-Dec-15
 ### Fixed
 - Compilation flags, let docs.rs see those functions! Otherwise we just have an empty doc on docs.rs.
