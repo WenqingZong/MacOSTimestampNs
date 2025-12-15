@@ -1,6 +1,8 @@
 //! MacOS only provides timestamps in microsecond precision, which might not be precious enough in
 //! some situations. This crate provides the current time timestamp in nanosecond precision.
 
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 #[cfg(feature = "chrono")]
 use chrono::{DateTime, Utc};
 use libc::c_int;
